@@ -65,6 +65,29 @@ export default class App extends Component {
           displayValue: (operator !== null ? displayValue.substr(0, displayValue.length -1) : displayValue) + input,
         })
         break;
+
+        case '.':
+          let decimal = displayValue.slice(-1) //gets last character
+          this.setState({
+            displayValue: decimal !== '.' ? displayValue + input : displayValue
+          })
+          break;
+
+          case 'CLR':
+          this.setState({
+            displayValue: '0',
+            operator: null
+          })
+          break;
+
+          case 'DEL':
+            let string = displayValue.toString();
+            let backspace = string.substr(0, string.length -1);
+            let length = string.length;
+            this.setState({
+              displayValue: length == 1 ? '0' : backspace
+            })
+            break;
     }
   };
 
