@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import inputNumberButton from "./inputNumberButton.js";
+import InputNumberButton from "./InputNumberButton";
 
 const buttons = [
   ["CLR", "DEL"],
@@ -16,7 +16,7 @@ export default class App extends Component {
   renderButtons() {
     let layouts = buttons.map((buttonRows, index) => {
       let rowItem = buttonRows.map((buttonItems, buttonIndex) => {
-        return <inputNumberButton 
+        return <InputNumberButton 
         value={buttonItems}
         handleOnPress={() =>{}}
         key={'btn-' + buttonIndex} />
