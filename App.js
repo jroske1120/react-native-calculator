@@ -15,6 +15,9 @@ export default class App extends Component {
   state = {
     displayValue: "0",
     operator: null,
+    firstVal: "",
+    secondVal: "",
+    nextVal: false,
   };
   renderButtons() {
     let layouts = buttons.map((buttonRows, index) => {
@@ -38,7 +41,7 @@ export default class App extends Component {
   }
 
   handleInput = (input) => {
-    const { displayValue, operator } = this.state;
+    const { displayValue, operator, firstVal, secondVal, nextVal } = this.state;
 
     switch (input) {
       case "0":
@@ -53,8 +56,17 @@ export default class App extends Component {
       case "8":
       case "9":
         this.setState({
-          displayValue: (displayValue === "0") ? input : displayValue + input,
+          displayValue: displayValue === "0" ? input : displayValue + input,
         });
+        if (!nextVal) {
+          this.setState({
+            firstVal: firstVal + input,
+          });
+        } else {
+          this.setState({
+            secondVal: secondVal + input,
+          });
+        }
         break;
       case "+":
       case "-":
@@ -62,32 +74,60 @@ export default class App extends Component {
       case "/":
         this.setState({
           operator: input,
-          displayValue: (operator !== null ? displayValue.substr(0, displayValue.length -1) : displayValue) + input,
-        })
+          nextVal: true,
+          displayValue:
+            (operator !== null
+              ? displayValue.substr(0, displayValue.length - 1)
+              : displayValue) + input,
+        });
         break;
 
-        case '.':
-          let decimal = displayValue.slice(-1) //gets last character
+      case ".":
+        let decimal = displayValue.slice(-1); //gets last character
+        this.setState({
+          displayValue: decimal !== "." ? displayValue + input : displayValue,
+        });
+        if (!nextVal) {
           this.setState({
-            displayValue: decimal !== '.' ? displayValue + input : displayValue
-          })
-          break;
-
-          case 'CLR':
+            firstVal: firstVal + input,
+          });
+        } else {
           this.setState({
-            displayValue: '0',
-            operator: null
-          })
-          break;
+            secondVal: secondVal + input,
+          });
+        }
+        break;
+      case "=":
+        let formatOperator =
+          operator == "x" ? "*" : operator == "÷" ? "/" : operator;
 
-          case 'DEL':
-            let string = displayValue.toString();
-            let backspace = string.substr(0, string.length -1);
-            let length = string.length;
-            this.setState({
-              displayValue: length == 1 ? '0' : backspace
-            })
-            break;
+        let result = eval(firstVal + formatOperator + secondVal);
+        this.setState({
+          displayValue: result % 1 === 0 ? result : result.toFixed(2),
+          firstVal: result % 1 === 0 ? result : result.toFixed(2),
+          secondVal: "",
+          operator: null,
+          nextVal: false,
+        });
+        break;
+      case "CLR":
+        this.setState({
+          displayValue: "0",
+          operator: null,
+          firstVal: "",
+          secondVal: "",
+          nextVal: false,
+        });
+        break;
+
+      case "DEL":
+        let string = displayValue.toString();
+        let backspace = string.substr(0, string.length - 1);
+        let length = string.length;
+        this.setState({
+          displayValue: length == 1 ? "0" : backspace,
+        });
+        break;
     }
   };
 
