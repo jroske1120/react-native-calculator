@@ -13,7 +13,8 @@ const buttons = [
 
 export default class App extends Component {
   state = {
-    displayValue: 0,
+    displayValue: "0",
+    operator: null,
   };
   renderButtons() {
     let layouts = buttons.map((buttonRows, index) => {
@@ -37,27 +38,41 @@ export default class App extends Component {
   }
 
   handleInput = (input) => {
-    const { displayValue } = this.state;
+    const { displayValue, operator } = this.state;
 
-    // switch (key) {
-    //   case value:
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-    this.setState({
-      displayValue: displayValue === "0" ? input : displayValue + input,
-    });
+    switch (input) {
+      case "0":
+      case "1":
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+        this.setState({
+          displayValue: (displayValue === "0") ? input : displayValue + input,
+        });
+        break;
+      case "+":
+      case "-":
+      case "x":
+      case "/":
+        this.setState({
+          operator: input,
+          displayValue: (operator !== null ? displayValue.substr(0, displayValue.length -1) : displayValue) + input,
+        })
+        break;
+    }
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>
-            {this.state.displayValue}
-          </Text>
+          <Text style={styles.resultText}>{this.state.displayValue}</Text>
         </View>
         <View style={styles.inputContainer}>{this.renderButtons()}</View>
         <View>History</View>
