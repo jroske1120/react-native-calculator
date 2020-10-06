@@ -138,7 +138,6 @@ export default class App extends Component {
           <Text style={styles.resultText}>{this.state.displayValue}</Text>
         </View>
         <View style={styles.inputContainer}>{this.renderButtons()}</View>
-        <View>History</View>
       </View>
     );
   }
